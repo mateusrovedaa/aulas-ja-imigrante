@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\Core\Database;
-use App\Model\User;
+use App\Models\User;
 
 $db = new Database();
 
@@ -21,7 +21,7 @@ do {
         $nome = readline("Digite um nome: ");
         $usuario = new User($nome);
         $connection = $db->getConnection();
-        $sql = "INSERT INTO teste (nome) VALUES ('" . $usuario->getName() . "')";
+        $sql = "INSERT INTO teste (nome) VALUES ('" . $usuario->getNome() . "')";
         $stmt = $connection->query($sql);
     } else if ($opcao == 2) {
         $connection = $db->getConnection();

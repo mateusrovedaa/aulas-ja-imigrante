@@ -4,10 +4,12 @@ namespace App\Core;
 
 use PDO;
 
-class Database{
+class Database
+{
     private $connection;
 
-    public function __construct(){
+    public function __construct()
+    {
         $host = 'localhost';
         $dbname = 'testeconexao';
         $username = 'postgres';
@@ -19,11 +21,13 @@ class Database{
         $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
-    public function getConnection(){
+    public function getConnection()
+    {
         return $this->connection;
     }
 
-    public function closeConnection(){
+    public function closeConnection()
+    {
         $this->connection = null;
     }
 }
