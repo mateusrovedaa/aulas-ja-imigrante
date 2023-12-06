@@ -22,29 +22,29 @@ class UsuarioDAO
         try {
             $sql = "SELECT * FROM $this->table ORDER BY id";
             $stmt = $this->connection->query($sql);
-            $Usuarios = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $usuarios = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
             $this->db->closeConnection();
 
-            return $Usuarios;
+            return $usuarios;
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
     }
 
-    public function recuperarUsuarioPorId($UsuarioId)
+    public function recuperarUsuarioPorId($usuarioId)
     {
         try {
             $sql = "SELECT * FROM $this->table WHERE id = ?";
             $stmt = $this->connection->prepare($sql);
-            $stmt->execute([$UsuarioId]);
-            $Usuario = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $stmt->execute([$usuarioId]);
+            $usuario = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             $this->db->closeConnection();
             
-            if ($Usuario) {
-                $UsuarioData = new Usuario($Usuario["nome"], $Usuario["id"]);
-                return $UsuarioData;
+            if ($usuario) {
+                $usuarioData = new Usuario($usuario["nome"], $usuario["id"]);
+                return $usuarioData;
             } else {
                 return null;
             }
@@ -53,20 +53,20 @@ class UsuarioDAO
         }
     }
 
-    public function create(Usuario $Usuario)
+    public function salvar(Usuario $usuario)
     {
         try {
             $sql = "INSERT INTO $this->table (nome) VALUES (?)";
             $stmt = $this->connection->prepare($sql);
 
-            $stmt->execute([$Usuario->getNome()]);
+            $stmt->execute([$usuario->getNome()]);
 
             $this->db->closeConnection();
 
             if ($stmt->rowCount() > 0) {
-                $UsuarioId = $this->connection->lastInsertId();
-                $UsuarioData = $this->recuperarUsuarioPorId($UsuarioId);
-                return $UsuarioData;
+                $usuarioId = $this->connection->lastInsertId();
+                $usuarioData = $this->recuperarUsuarioPorId($usuarioId);
+                return $usuarioData;
             } else {
                 return null;
             }
@@ -75,18 +75,18 @@ class UsuarioDAO
         }
     }
 
-    public function atualizar($Usuario)
+    public function atualizar($usuario)
     {
         try {
             $sql = "UPDATE $this->table SET nome = ? WHERE id = ?";
             $stmt = $this->connection->prepare($sql);
-            $stmt->execute([$Usuario->getNome(), $Usuario->getId()]);
+            $stmt->execute([$usuario->getNome(), $usuario->getId()]);
             
             $this->db->closeConnection();
 
             if ($stmt->rowCount() > 0) {
-                $UsuarioData = $this->recuperarUsuarioPorId($Usuario->getId());
-                return $UsuarioData;
+                $usuarioApagar = $this->recuperarUsuarioPorId($usuario->getId());
+                return $usuarioApagar;
             } else {
                 return null;
             }
@@ -98,15 +98,15 @@ class UsuarioDAO
     public function apagar($id)
     {
         try {
-            $UsuarioToapagar = $this->recuperarUsuarioPorId($id);
+            $usuarioApagar = $this->recuperarUsuarioPorId($id);
             
-            if ($UsuarioToapagar) {
+            if ($usuarioApagar) {
                 $sql = "DELETE FROM $this->table WHERE id = ?";
                 $stmt = $this->connection->prepare($sql);
                 $stmt->execute([$id]);
                 $this->db->closeConnection();
             } 
-            return $UsuarioToapagar;
+            return $usuarioApagar;
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }

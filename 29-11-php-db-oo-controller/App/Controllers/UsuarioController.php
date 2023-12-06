@@ -46,7 +46,7 @@ class UsuarioController
     public function salvar(Usuario $usuario)
     {
         try {
-            $usuarioCriado = $this->usuarioDAO->create($usuario);
+            $usuarioCriado = $this->usuarioDAO->salvar($usuario);
             return $usuarioCriado;
         } catch (\Exception $e) {
             echo "Erro ao inserir Usuario: " . $e->getMessage();
