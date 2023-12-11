@@ -43,27 +43,34 @@ class UsuarioController
         }
     }
 
-    public function salvar(Usuario $usuario)
+    public function salvar($request)
     {
         try {
+            $usuario = new Usuario($request['nome'], null, $request['email']);
             $usuarioCriado = $this->usuarioDAO->salvar($usuario);
+            http_response_code(200);
             return $usuarioCriado;
         } catch (\Exception $e) {
-            echo "Erro ao inserir Usuario: " . $e->getMessage();
+            http_response_code(400);
+            return "Erro ao inserir Usuario: " . $e->getMessage();
         }
     }
 
-    public function atualizar($usuario)
+    public function atualizar($request, $id)
     {
         try {
+            $usuario = new Usuario($request['nome'], $id, $request['email']);
             $usuarioAtualizado = $this->usuarioDAO->atualizar($usuario);
             if ($usuarioAtualizado) {
+                http_response_code(200);
                 return $usuarioAtualizado;
             } else {
-                echo "Usuario não encontrado";
+                http_response_code(404);
+                return "Usuario não encontrado";
             }
         } catch (\Exception $e) {
-            echo "Erro ao atualizar Usuario: " . $e->getMessage();
+            http_response_code(400);
+            return "Erro ao atualizar Usuario: " . $e->getMessage();
         }
     }
 
@@ -72,12 +79,15 @@ class UsuarioController
         try {
             $usuarioApagado = $this->usuarioDAO->apagar($id);
             if ($usuarioApagado) {
-                echo "Usuario " . $id . " apagado";
+                http_response_code(200);
+                return "Usuario " . $id . " apagado";
             } else {
-                echo "Usuario não encontrado";
+                http_response_code(404);
+                return "Usuario não encontrado";
             }
         } catch (\Exception $e) {
-            echo "Erro ao atualizar Usuario: " . $e->getMessage();
+            http_response_code(400);
+            return "Erro ao atualizar Usuario: " . $e->getMessage();
         }
     }
 }
